@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+    <!-- Required meta tags -->
+    <title>MTIMS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+    <!-- Custom CSS styles-->
+    <link rel="stylesheet" href="css/style.css">
+        
+    <!-- JS Code -->
+    <script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+
+
+    <script>
+
+        //JS Code for checking the authorization and redirects to login page if not authorised
+        var Authorization;
+        $(document).ready(function () {
+            Authorization = localStorage.getItem('Authorization');
+            console.log(Authorization);
+            $("#recform").hide();
+            $("#regform").hide();
+            if (Authorization == null) {
+                alert("You need to login to access this page");
+                window.location = "Login.html"
+            }
+        });
+
+
+        //JS Function that executes automatically when page loads
+        $(function () {
+            
+            //AJAX Call for getting the invoice data and feeding it in the invoice table
+            $.ajax({
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Basic " + Authorization
+                },
+                url: "http://localhost:8080/invoices",
+
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 404) {
+                        $("#invoicetable").append("<tr>" + data.error + "</tr>")
+                    }
+                    $.each(data, function (i, item) {
+
+                        var invoicetype = "Regular";
+                        if(data[i].invoiceIsRecurring == true){
+                            invoicetype = "Recurring";
+                        }
+                        $("#invoicetable").append(
+                            "<tr>"+
+                            "<td style=\"text-align: center\" id=\"userid\">"+data[i].datePlaced+"</td>"+
+                            "<td style=\"text-align: center\">"+data[i].clientid+"</td>"+
+                            "<td style=\"text-align: center\">"+data[i].userId+"</td>"+
+                            "<td style=\"text-align: center\">"+invoicetype+"</td>"+
+                            "<td style=\"text-align: center\">"+data[i].amount+"</td>"+
+                            "<td style=\"text-align: center\">"+"<button onclick=\"updateinvoice("+data[i].invoiceId+")\" class=\"btn btn-primary\">Edit</button>"+"</td>"+
+                            "<td style=\"text-align: center\">"+"<button onclick=\"deleteinvoice("+data[i].invoiceId+")\" class=\"btn btn-primary\">Delete</button>"+"</td>"
+                            +"</tr>"
+                        )
+
+
+                    })
+
+                }
+            })
+
+            
+            //AKAX Get call for filling the clients for invoice update
+            $.ajax({
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Basic " + Authorization
+                },
+                url: "http://localhost:8080/clients",
+
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 404) {
+                        $("#regclients").append("<option value=\"error\">Error</option>")
+                    }
+                    $.each(data, function (i, item) {
+
+                        $("#regclients").append(
+
+                            "<option value=\""+data[i].clientId+"\">"+data[i].firstName+" "+data[i].lastName+"</option>"
+
+                        )
+
+                        $("#recclients").append(
+
+                            "<option value=\""+data[i].clientId+"\">"+data[i].firstName+" "+data[i].lastName+"</option>"
+
+                        )
+
+
+                    })
+
+                }
+            })
+
+        });
+
+        
+        //Delete Invoice Function that takes invoiceId as parameter and delete the invoice
+        function deleteinvoice(invoiceId){
+
+            $.ajax({
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Basic " + Authorization
+                },
+                url: "http://localhost:8080/deleteinvoice/"+invoiceId,
+
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 404) {
+                        alert("User Not Found");
+                    }
+                    alert("Invoice Succesfully Deleted");
+
+
+                }
+            })
+        }
+
+
+    </script>
+
+    </head>
+    <body>
+        <!-- HTML Code for Navigation Bar -->
+        <nav class="navbar navbar-light bg-light navbar-expand-lg fixed-top">
+            <div class="container"> 
+                <a class="navbar-brand" href="#">Multi Tenant Invoice Managment System</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span> 
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active"> <a class="nav-link" href="Dashboard.html">Home</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="Dashboard.html">Dashboard</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HTML Code for Invoice Managment Table -->
+        <section id="invoicemngmt" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title"><b>Invoice Management</b></h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <table class="table table-striped table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center">Invoice Date</th>
+                                <th style="text-align: center">Client</th>
+                                <th style="text-align: center">User</th>
+                                <th style="text-align: center">Invoice Type</th>
+                                <th style="text-align: center">Invoice Amount</th>
+                                <th style="text-align: center" colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoicetable">
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- HTML Code for Regular Invoice Update form -->
+        <section id="regform" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title">
+                            <b>Regular Invoice Update</b>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="reginvoiceid">Invoice Id:</label>
+                                    <input class="form-control" id="reginvoiceid" type="text" disabled>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="client">Select Client:</label>
+                                    <select name="clients" class="custom-select mb-3" id="regclients">
+
+
+                                    </select>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label>Select Items:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <table class="table table-striped table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center">Items</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="regitems">
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" class="btn btn-success" value="Update Regular Invoice" id="createregbtn">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- HTML Code for Recurring Invoice Update Form-->
+        <section id="recform" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title">
+                            <b>Recurring Invoice Update</b>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="recinvoiceid">Invoice Id:</label>
+                                    <input class="form-control" id="recinvoiceid" type="text" disabled>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="recclient">Select Client:</label>
+                                    <select name="clients" class="custom-select mb-3" id="recclients">
+
+                                    </select>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="recperiod">Enter Recurring Period:</label>
+                                    <input type="number" class="form-control" id="recperiod">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label>Select Items:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <table class="table table-striped table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center">Items</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recitems">
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" class="btn btn-success" value="Update Recurring Invoice" id="createrecbtn">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- HTML Code for Footer -->
+        <footer id="page-footer" class="bg-dark">
+            <div class="container"> <span class="text-muted">Created By Saloni Sharma</span></div>
+        </footer>
+        <!-- Optional JavaScript --> 
+
+        <script>
+            
+            //Update Invoice function that takes invoiceId as a parameter and feeds the update form
+            function updateinvoice(invoiceId){
+                
+                $("#invoicemngmt").hide();
+
+                //AJAX Get call to get the details of the invoice and feeds the data in the update form
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/invoices/"+invoiceId,
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            alert("Invoice Not Found");
+                        }
+
+                        if(data.invoiceIsRecurring == false){
+                            $("#reginvoiceid").val(data.invoiceId);
+                            $("#recform").hide();
+                            $("#regform").show();
+
+                        }
+                        if(data.invoiceIsRecurring == true){
+
+                            $("#recinvoiceid").val(data.invoiceId);
+                            $("#regform").hide();
+                            $("#recform").show();
+                        }
+
+                    }
+                })
+
+
+                //AJAX Get call to fills the item list in the regular and recurring invoice update form
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/items",
+
+                    success: function (data) {
+                        items = data;
+                        console.log(data)
+                        if (data.status == 404) {
+                            $("#regitems").append("<tr>" + data.error + "</tr>")
+                        }
+                        $.each(data, function (i, item) {
+
+                            $("#regitems").append(
+                                "<tr>"+
+                                "<td style=\"text-align: left\">"+
+                                "<div class=\"custom-control custom-checkbox mb-3\">"+
+                                "<input type=\"checkbox\" class=\"custom-control-input\" id=\""+data[i].itemId+"reg"+"\" name=\"regitemscheck\" value=\""+data[i].itemId+"\">"+
+                                "<label class=\"custom-control-label\" for=\""+data[i].itemId+"reg"+"\">"+data[i].itemName+"</label>"+
+                                "</div>"+
+                                "</td>"+
+                                "<td>"+
+                                "<div class=\"col-sm-5\"><input type=\"number\" class=\"form-control\" id=\""+data[i].itemId+"qtyreg"+"\"></div>"+
+                                "</td>"+
+                                "</tr>"
+                            )
+
+                            $("#recitems").append(
+                                "<tr>"+
+                                "<td style=\"text-align: center\">"+
+                                "<div class=\"custom-control custom-checkbox mb-3\">"+
+                                "<input type=\"checkbox\" class=\"custom-control-input\" id=\""+data[i].itemId+"rec"+"\" name=\"regitemscheck\" value=\""+data[i].itemId+"\">"+
+                                "<label class=\"custom-control-label\" for=\""+data[i].itemId+"rec"+"\">"+data[i].itemName+"</label>"+
+                                "</div>"+
+                                "</td>"+
+                                "<td>"+
+                                "<div class=\"col-sm-5\"><input type=\"number\" class=\"form-control\" id=\""+data[i].itemId+"qtyrec"+"\"></div>"+
+                                "</td>"+
+                                "</tr>"
+                            )
+
+
+                        })
+
+                    }
+                })
+
+
+
+            }
+
+
+            
+            //function for regular invoice update from the update form
+            $(document).on('click', '#createregbtn', function () {
+
+                var noniso = new Date();
+                noniso.setDate(noniso.getDate() + 7);
+                var dueDate = noniso.toISOString();
+                var invoiceIsRecurring = 0;
+                var clientId = $("#regclients").val();
+                var invoiceIsLocked = false;
+                var userId = localStorage.userid;
+                var paymentStatus = "PAYMENT_DRAFT";
+                var invoiceItem = new Object();
+                var items = [];
+                $.each($("input[name='regitemscheck']:checked"), function(){
+                    items.push($(this).val());
+                });
+
+                $.each($(items), function(){
+                    var qtyid = this+"qtyreg";
+                    invoiceItem[this.toString()] = $("#"+qtyid).val();  
+                });
+
+                var json = {dueDate, invoiceIsRecurring, clientId, invoiceIsLocked, userId, paymentStatus, invoiceItem }
+                console.log(json);
+                $.ajax({
+                    url: "http://localhost:8080/updateinvoice",
+                    type: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        alert('Invoice Updated successfully')
+                        window.location = 'InvoiceManagement.html'
+
+                    }
+
+                })
+
+            });
+
+
+            //function for recurring invoice update from the update form
+            $(document).on('click', '#createrecbtn', function () {
+
+                var noniso = new Date();
+                noniso.setDate(noniso.getDate() + 7);
+                var dueDate = noniso.toISOString();
+                var renewDate = dueDate;
+                var invoiceIsRecurring = 1;
+                var recurringPeriod = $("#recperiod").val();
+                var clientId = $("#recclients").val();
+                var userId = localStorage.userid;
+                var paymentStatus = "PAYMENT_DRAFT";
+                var invoiceItem = new Object();
+                var items = [];
+                $.each($("input[name='regitemscheck']:checked"), function(){
+                    items.push($(this).val());
+                });
+
+                $.each($(items), function(){
+                    var qtyid = this+"qtyrec";
+                    invoiceItem[this.toString()] = $("#"+qtyid).val();  
+                });
+
+                var json = {dueDate, renewDate, invoiceIsRecurring, recurringPeriod, clientId, userId, paymentStatus, invoiceItem }
+                console.log(json);
+                $.ajax({
+                    url: "http://localhost:8080/updateinvoice",
+                    type: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        alert('Invoice Updated successfully')
+                        window.location = 'InvoiceManagement.html'
+                    }
+                })
+            });
+
+        </script>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> 
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

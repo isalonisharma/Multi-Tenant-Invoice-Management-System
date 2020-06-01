@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <title>MTIMS</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- Custom CSS styles-->
+        <link rel="stylesheet" href="css/style.css">
+
+        <!-- Jquery JS-->
+        <script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+
+        <script>
+            //Authorization check for checking if the user is loggedin or not.
+            var Authorization;
+            $(document).ready(function () {
+                Authorization = localStorage.getItem('Authorization');
+                console.log(Authorization);
+                $("#clientupdate").hide();
+                if (Authorization == null) {
+                    alert("You need to login to access this page");
+                    window.location = "Login.html"
+                }
+            });
+
+            // Function that automatically executes when a page loads
+            $(function () {
+
+
+                //AJAX Get Call for feeding the client table with data from the database.
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/clients",
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            $("#clientstable").append("<tr>" + data.error + "</tr>")
+                        }
+                        $.each(data, function (i, item) {
+
+
+                            $("#clientstable").append(
+                                "<tr>"+
+                                "<td style=\"text-align: center\">"+data[i].firstName+" "+data[i].lastName+"</td>"+
+                                "<td style=\"text-align: center\">"+data[i].mobileNumber+"</td>"+
+                                "<td style=\"text-align: center\">"+data[i].emailId+"</td>"+
+                                "<td style=\"text-align: center\">"+"<button onclick=\"updateclient("+data[i].clientId+")\" class=\"btn btn-primary\">Edit</button>"+"</td>"+
+                                "<td style=\"text-align: center\">"+"<button onclick=\"deleteclient("+data[i].clientId+")\" class=\"btn btn-primary\">Delete</button>"+"</td>"
+                                +"</tr>"
+                            )
+
+
+                        })
+
+                    }
+                })
+
+            });
+
+            //JS function for deleting the client
+            function deleteclient(clientId){
+
+                //AJAX Post call for deleting the client
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/deleteclient/"+clientId,
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            alert("Client Not Found");
+                        }
+                        alert("Client Succesfully Deleted");
+
+
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+
+        <!-- Navigation Bar HTML Code-->
+        <nav class="navbar navbar-light bg-light navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">Multi Tenant Invoice Managment System</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> 
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active"> 
+                            <a class="nav-link" href="Dashboard.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Dashboard.html">Dashboard</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Client List HTML Code-->
+        <section id="clientlist" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title">
+                            <b>Client Management</b>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <table class="table table-striped table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center">Name</th>
+                                <th style="text-align: center">Mobile Number</th>
+                                <th style="text-align: center">Email Id</th>
+                                <th style="text-align: center" colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientstable">
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Client Update Form HTML Code-->
+        <section id="clientupdate" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title">
+                            <b>Client Update</b>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="firstname">Enter First Name:</label>
+                                    <input class="form-control" id="firstname" type="text">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="lastname">Enter Last Name:</label>
+                                    <input class="form-control" id="lastname" type="text">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="mobileno">Enter Mobile Number:</label>
+                                    <input class="form-control" id="mobileno" type="text">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="email">Enter Email Id:</label>
+                                    <input class="form-control" id="email" type="email">
+                                </div>
+                            </center>
+                        </div>
+                        <input class="form-control" id="clientId" type="text" hidden >
+
+                        <div class="form-group">
+                            <input type="button" class="btn btn-success" value="Update Client" id="updateclientbtn">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Footer HTML Code-->
+        <footer id="page-footer" class="bg-dark">
+            <div class="container"> 
+                <span class="text-muted">Created By Saloni Sharma</span>
+            </div>
+        </footer>
+        <!-- Optional JavaScript --> 
+
+
+        <script>
+
+            //JS function for Update Client that takes the client id as parameter and fills the client
+            function updateclient(clientId){
+
+
+                $("#clientlist").hide();
+                $("#clientupdate").show();
+
+                //AJAX Call for getting the Client Details and fill the update client form.
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/client/"+clientId,
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            alert("User Not Found");
+                        }
+
+                        $("#firstname").val(data.firstName);
+                        $("#lastname").val(data.lastName);
+                        $("#mobileno").val(data.mobileNumber);
+                        $("#email").val(data.emailId);
+                        $("#clientId").val(data.clientId);
+
+
+                    }
+                })
+
+
+            }
+
+            //update client function which executes when update client button is clicked and gets the 
+            //form data and submit it to the server
+            $(document).on('click', '#updateclientbtn', function () {
+                var firstName = $("#firstname").val();
+                var lastName = $("#lastname").val();
+                var mobileNumber = $("#mobileno").val();
+                var organization = "Organization";
+                var emailId = $("#email").val();
+                var clientIsLocked = false;
+                var clientId = $("#clientId").val();
+                var json = {firstName, lastName, mobileNumber, organization, emailId, clientIsLocked }
+
+                $.ajax({
+                    url: "http://localhost:8080/updateclient/"+clientId,
+                    type: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        alert('client created successfully')
+                        window.location = 'ClientManagment.html'
+
+                    }
+
+                })
+            });
+        </script>
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> 
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

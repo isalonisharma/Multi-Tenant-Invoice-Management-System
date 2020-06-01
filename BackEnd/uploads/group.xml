@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group>
+	<client>
+		<firstName>saloni</firstName>
+		<lastName>sharma</lastName>
+		<mobileNumber>1234567890</mobileNumber>
+		<emailId>saloni@gmail.com</emailId>
+		<organization>Disney</organization>
+		<clientIsLocked>false</clientIsLocked>
+	</client>
+	<client>
+		<firstName>aditya</firstName>
+		<lastName>sharma</lastName>
+		<mobileNumber>8770064399</mobileNumber>
+		<emailId>aditya@gmail.com</emailId>
+		<clientIsLocked>false</clientIsLocked>
+		<organization>Disney</organization>
+	</client>
+</group>

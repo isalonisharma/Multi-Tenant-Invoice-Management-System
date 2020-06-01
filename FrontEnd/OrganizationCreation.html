@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <!-- Required meta tags -->
+        <title>MTIMS</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <!-- Custom CSS styles-->
+        <link rel="stylesheet" href="css/style.css">
+        
+        <!-- JS Jquery Code -->
+        <script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+        <script>
+            //JS code for authorization check which redirects when not authorized
+            var Authorization;
+            $(document).ready(function () {
+                Authorization = localStorage.getItem('Authorization');
+                console.log(Authorization);
+                if (Authorization == null) {
+                    alert("You need to login to access this page");
+                    window.location = "Login.html"
+                }
+            });
+            
+            //JS Function that executes when create organization button is clicked and gets the value from the form
+            //and submits the data to the backend
+            $(document).on('click', '#createorgbtn', function () {
+                var organizationName = $("#orgname").val();
+                var organizationLogo = organizationName+".png";
+                var organizationCurrency = $("#orgcur").val();
+                var organizationDate = $("#orgdate").val();
+                var organizationEmailId = $("#orgemail").val();
+                var organizationIsLocked = "false";
+                var organizationReminderMail = $("#orgrempol").val();
+                var organizationThankYouMail = $("#orgthnkpol").val();
+
+                var json = {organizationName, organizationLogo, organizationCurrency, organizationDate, organizationEmailId, organizationIsLocked, organizationReminderMail, organizationThankYouMail}
+                console.log(json);
+                $.ajax({
+                    url: "http://localhost:8080/createorganization",
+                    type: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    data: JSON.stringify(json),
+                    
+                    success: function (data) {
+                        alert('Organization created successfully')
+                        window.location = 'Dashboard.html'
+
+                    }
+
+                })
+            });
+        </script>
+    </head>
+    <body>
+        <!-- HTML Code for Navigation Bar -->
+        <nav class="navbar navbar-light bg-light navbar-expand-lg fixed-top">
+            <div class="container"> 
+                <a class="navbar-brand" href="#">Multi Tenant Invoice Managment System</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> 
+                    <span class="navbar-toggler-icon"></span> 
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active"> <a class="nav-link" href="Dashboard.html">Home</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="Dashboard.html">Dashboard</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        
+        <!-- HTML Code for Organization Creation Form -->
+        <section id="features" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title"><b>Organization Creation</b></h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <form class="form-horizontal" enctype="multipart/form-data" id="fileUploadForm">
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="orgname">Enter Organization Name:</label>
+                                    <input class="form-control" id="orgname" type="text">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="orgcur">Enter Organization Currency:</label>
+                                    <input class="form-control" id="orgcur" type="text">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="orgdate">Select Date Format:</label>
+                                    <select name="orgdate" class="custom-select" id="orgdate">
+                                        <option value="long">Long (Ex. - April 3, 2019)</option>
+                                        <option value="medium">Medium (Ex. - Apr 3, 2019)</option>
+                                        <option value="short">Short (Ex. - 4/3/19)</option>
+                                        <option value="full">Full (Ex. - Wednesday, April 3, 2019)</option>
+                                    </select>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="orgemail">Enter Organization Email:</label>
+                                    <input class="form-control" id="orgemail" type="text">
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="orgrempol">Enter Organization Reminder Email Policy:</label>
+                                    <select name="orgrempol" class="custom-select" id="orgrempol">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5">
+                                    <label for="orgthnkpol">Enter Organization Thank you Email Policy:</label>
+                                    <select name="orgthnkpol" class="custom-select" id="orgthnkpol">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" class="btn btn-success" value="Create Organization" id="createorgbtn">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+`       <!-- HTML Code for Footer -->
+        <footer id="page-footer" class="bg-dark">
+            <div class="container"> 
+                <span class="text-muted">Created By Saloni Sharma</span>
+            </div>
+        </footer>
+        <!-- Optional JavaScript --> 
+
+        <script>
+            
+            //JS Code for displaying the name of uploaded file
+            $(".custom-file-input").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+        </script>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> 
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

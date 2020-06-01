@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <title>MTIMS</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Custom CSS styles-->
+        <link rel="stylesheet" href="css/style.css">
+        
+        <!-- JS Code -->
+        <script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+        
+        
+        
+        <script>
+
+            //JS code for authorization check
+            var Authorization;
+            $(document).ready(function () {
+                Authorization = localStorage.getItem('Authorization');
+                console.log(Authorization);
+                $("#itemupdate").hide();
+                if (Authorization == null) {
+                    alert("You need to login to access this page");
+                    window.location = "Login.html"
+                }
+            });
+
+            $(function () {
+
+                //AJAX Get call for retireveing the items and feeding it in the item list table
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/items",
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            $("#itemlist").append("<tr>" + data.error + "</tr>")
+                        }
+                        $.each(data, function (i, item) {
+
+                          
+                                $("#itemlist").append(
+                                    "<tr>"+
+                                    "<td style=\"text-align: center\">"+data[i].itemName+"</td>"+
+                                    "<td style=\"text-align: center\">"+data[i].itemManufacturer+"</td>"+
+                                    "<td style=\"text-align: center\">"+data[i].itemRate+"</td>"+
+                                    "<td style=\"text-align: center\">"+"<button onclick=\"updateitem("+data[i].itemId+")\" class=\"btn btn-primary\">Edit</button>"+"</td>"+
+                                    "<td style=\"text-align: center\">"+"<button onclick=\"deleteitem("+data[i].itemId+")\" class=\"btn btn-primary\">Delete</button>"+"</td>"
+                                    +"</tr>"
+                                )
+                            
+
+                        })
+
+                    }
+                })
+
+            });
+
+
+
+
+            //JS Function for delete item which takes itemId as a parameter and deletes the item
+            function deleteitem(itemId){
+
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/deleteitem/"+itemId,
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            alert("Item Not Found");
+                        }
+                        alert("Item Succesfully Deleted");
+
+
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-light navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">Multi Tenant Invoice Managment System</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> 
+                    <span class="navbar-toggler-icon"></span> 
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active"> <a class="nav-link" href="Dashboard.html">Home</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="Dashboard.html">Dashboard</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section id="itemtable" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title"><b>Item Management</b></h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <table class="table table-striped table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center">Name</th>
+                                <th style="text-align: center">Manufacturer</th>
+                                <th style="text-align: center">Rate</th>
+                                <th style="text-align: center" colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemlist">
+                            
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        
+        <section id="itemupdate" class="bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="section-title"><b>Item Update</b></h3>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5"><label for="itemname">Enter Item Name:</label>
+                                    <input class="form-control" id="itemname" type="text">
+                                </div></center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5"><label for="itemmanu">Enter Item Manufacturer:</label>
+                                    <input class="form-control" id="itemmanu" type="text">
+                                </div></center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                                <div class="col-sm-5"><label for="itemrate">Enter Item Rate:</label>
+                                    <input class="form-control" id="itemrate" type="number">
+                                </div></center>
+                        </div>
+                        <input class="form-control" id="itemid" type="text" hidden >
+
+
+                        <div class="form-group">
+
+                            <input type="button" class="btn btn-success" value="Update Item" id="itemupdatebtn">
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+
+
+        <footer id="page-footer" class="bg-dark">
+            <div class="container"> <span class="text-muted">Created By Saloni Sharma</span></div>
+        </footer>
+        <!-- Optional JavaScript --> 
+        
+        <script>
+
+            //JS Function for update item which takes itemId as a parameter and updates the item update form
+            function updateitem(itemId){
+
+
+                $("#itemtable").hide();
+                $("#itemupdate").show();
+
+                $.ajax({
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic " + Authorization
+                    },
+                    url: "http://localhost:8080/item/"+itemId,
+
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == 404) {
+                            alert("Item Not Found");
+                        }
+
+                        $("#itemname").val(data.itemName);
+                        $("#itemrate").val(data.itemRate);
+                        $("#itemmanu").val(data.itemManufacturer);
+                        $("#itemid").val(data.itemId);
+                       
+                    }
+                })
+            }
+            
+            
+            //JS Function for itemupdate which gets the values from the update form and submits the data to backend
+              $(document).on('click', '#itemupdatebtn', function () {
+                    var itemName = $("#itemname").val();
+                    var itemManufacturer = $("#itemmanu").val();
+                    var itemRate = $("#itemrate").val();
+                    var itemId = $("#itemid").val();
+                    var itemIsLocked = "false";
+                    var json = {itemName, itemManufacturer, itemRate, itemIsLocked}
+
+                    $.ajax({
+                        url: "http://localhost:8080/updateitem/"+itemId,
+                        type: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Basic " + Authorization
+                        },
+                        data: JSON.stringify(json),
+                        success: function (data) {
+                            alert('user created successfully')
+                            window.location = 'ItemManagment.html'
+                        }
+                    })
+                });
+        </script>
+        
+        
+        <!-- jQuery first, then Popper.js, then Bootstrap JS --> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> 
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
