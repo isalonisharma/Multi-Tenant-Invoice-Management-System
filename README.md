@@ -52,9 +52,11 @@ The dashboard shows the following information in different widgets. Each widget 
 	2. The 3 most recently created invoices.
 	3. A bar-graph show the total collection received (invoices with ‘paid’ status) & total amount due on a daily/weekly/monthly basis.
  
-### Invoice: A user can create an invoice by adding Items to it and associating it with a Client. 
+### Invoice: 
 
-Once the Invoice is created, the user clicks on “save and send”, the system generates a PDF of the invoice and sends it as an attachment to the Client. Every Invoice has a status associated to it. 
+A user can create an invoice by adding Items to it and associating it with a Client. 
+Once the Invoice is created, the user clicks on “save and send”, the system generates a PDF of the invoice and sends it as an attachment to the Client. 
+Every Invoice has a status associated to it. 
 
 **The status change can happen as follows:**
 
