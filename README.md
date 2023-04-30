@@ -50,7 +50,7 @@ The dashboard shows the following information in different widgets. Each widget 
 
 	1. The upcoming 3 invoices that are due.
 	2. The 3 most recently created invoices.
-	3. A bar-graph show the total collection received (invoices with ‘paid’ status) & total amount due on a daily/weekly/monthly basis.
+	3. A bar-graph show the total collection received & total amount due on a daily/weekly/monthly basis.
  
 ### Invoice: 
 
@@ -64,12 +64,12 @@ Every Invoice has a status associated to it.
 	Once the invoice is emailed to the Client, the status of the Invoice changes to “Sent”.
 	
 	2. The Invoice has a due date associated to it. 
-	If the status of the invoice is not changed to “Paid” within the due date, the status of the invoice changes to “Due”. 
+	If the status of the invoice is not changed to “Paid” within due date, the status of the invoice changes to “Due”. 
 	Based on the administrator’s settings, an email may be sent to the Client reminding of the invoice.
 	
 	3. The user can change the status of the Invoice to “Paid” at any time. 
 	Based on the administrator’s settings, a thank-you mail may be sent to the Client. 
-	The user can change the status of the Invoice as “Paid” only for those which he has created, i.e he is the owner of that Invoice.
+	The user can change the status of the Invoice as “Paid” only for those which he has created.
  
 ### Search: 
 A user can search for an Invoice based on the Invoice Id, Client’s name or an Item.
