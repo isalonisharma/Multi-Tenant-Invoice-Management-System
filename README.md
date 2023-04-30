@@ -64,7 +64,7 @@ Every Invoice has a status associated to it.
 	Once the invoice is emailed to the Client, the status of the invoice changes to “Sent”.
 	
 	2. The Invoice has a due date associated to it. 
-	If the status of the invoice is not changed to “Paid” within due date, the status of the invoice changes to “Due”. 
+	If the invoice status is not changed to “Paid” within the due date, the status changes to “Due”. 
 	Based on the administrator’s settings, an email may be sent to the Client reminding of the invoice.
 	
 	3. The user can change the status of the Invoice to “Paid” at any time. 
