@@ -30,12 +30,12 @@ A user can be an admin or a normal user.
  
 ### An admin user should be able to do the following in addition to what a normal user can do:
      
-      a. Manage Users in the system.
-      b. Upload a “XML” file containing client list that can be imported into the system.
-      c. Export the summary of invoices generated in a week/month/quarter/year in an excel format.
-      d. Customize the application:
-         1. You can upload a company logo for use on the "header" section of the website and invoices.
-         2. Set option to:
+      1. Manage Users in the system.
+      2. Upload a “XML” file containing client list that can be imported into the system.
+      3. Export the summary of invoices generated in a week/month/quarter/year in an excel format.
+      4. Customize the application:
+         a. You can upload a company logo for use on the "header" section of the website and invoices.
+         b. Set option to:
               -> Automatically send a reminder email to the client when the due date is passed.
               -> Send a thank-you email to the client when the invoice status changes to “Paid ”.
               -> Change the display of dates and currencies in the system.
