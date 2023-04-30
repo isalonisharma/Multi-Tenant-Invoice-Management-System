@@ -9,24 +9,24 @@ Any company can register with the system and can perform the following actions:
 A user can be an admin or a normal user.
  
 ### A normal user should be able to do the following:
-      
-      a. Update his/her profile.
+	1. Update his/her profile.
 
-      b. Create/Manage a one-time Invoice.
+	2. Create/Manage a one-time Invoice.
 
-      c. Create/Manage a recurring Invoice. A recurring invoice is generated periodically as set by the user. 
-         For eg., The user may create a recurring invoice to be generated on 5th of every month. 
-         Once the recurring invoice is created, it is sent automatically by the system to the client.
+	3. Create/Manage a recurring Invoice. 
+	A recurring invoice is generated periodically as set by the user. 
+	For eg., The user may create a recurring invoice to be generated on 5th of every month. 
+	Once the recurring invoice is created, it is sent automatically by the system to the client.
 
-      d. Create/Manage an Item. Item is the product for which the invoice is generated. 
-         For eg., A computer sales dealer would create an Item “DELL Laptop” and generate an invoice using the Item. 
-         Item contains the name and price of the product so that the price is autofilled in the Invoice
+	4. Create/Manage an Item. Item is the product for which the invoice is generated. 
+	For eg., A computer sales dealer would create an Item “DELL Laptop” and generate an invoice using the Item. 
+	Item contains the name and price of the product so that the price is autofilled in the Invoice
 
-      e. Create/Manage a Client. Client is the person/company to which an Invoice is generated and sent. 
-         In other words, it is the customer to whom the invoice needs to be billed. 
-         General Information about the Client needs to be saved; Name, Email, Company, Address, etc.)
+	5. Create/Manage a Client. Client is the person/company to which an Invoice is generated and sent. 
+	In other words, it is the customer to whom the invoice needs to be billed. 
+	General Information about the Client needs to be saved; Name, Email, Company, Address, etc.)
 
-      f. Update the status of an invoice as “paid” for invoices he created
+	6. Update the status of an invoice as “paid” for invoices he created.
  
 ### An admin user should be able to do the following in addition to what a normal user can do:
      
@@ -47,38 +47,38 @@ A user can be an admin or a normal user.
 
               2. Automatically send a thank-you email to the client once the status of an Invoice is updated to “paid”.
 
-              3. Change the display of dates and currencies in the system. For eg., admin set the display of date to be MMM-dd-yyyy 
-	             and the effect is seen in the entire system for th tenant. Similarly, the format of currency can be changed to 
-		     affect the entire system for that tenant.
+              3. Change the display of dates and currencies in the system. 
+	         For eg., admin set the display of date to be MMM-dd-yyyy and the effect is seen in the entire system for th tenant. 
+		 Similarly, the format of currency can be changed to affect the entire system for that tenant.
  
-### Dashboard: Every user, when logs into the system lands on the dashboard. 
+### Dashboard: 
 
+Every user, when logs into the system lands on the dashboard. 
 The dashboard shows the following information in different widgets. Each widget should be loaded via Ajax.
 
-      a. The upcoming 3 invoices that are due.
+	i. The upcoming 3 invoices that are due.
 
-      b. The 3 most recently created invoices.
+	ii. The 3 most recently created invoices.
 
-      c. A bar-graph showing the total collection received (i.e. invoices with ‘paid’ status) and total amount due on a 
-         daily/weekly/monthly basis.
+	iii. A bar-graph showing the total collection received (i.e. invoices with ‘paid’ status) 
+	and total amount due on a daily/weekly/monthly basis.
  
 ### Invoice: A user can create an invoice by adding Items to it and associating it with a Client. 
 
 Once the Invoice is created, the user clicks on “save and send”, the system generates a PDF of the invoice and sends it as an attachment to the Client. Every Invoice has a status associated to it. 
 
-The status change can happen as follows:
+**The status change can happen as follows:**
 
-     a. The initial status of the Invoice is “Draft”. 
+	i. The initial status of the Invoice is “Draft”. 
 	Once the invoice is emailed to the Client, the status of the Invoice changes to “Sent”.
 
-     b. The Invoice has a due date associated to it. 
-	 If the status of the invoice is not changed to “paid” within the due date, 
-	 the status of the invoice changes to “Due” and based on the administrator’s settings, 
-	 an email may be sent to the Client reminding of the invoice.
+	ii. The Invoice has a due date associated to it. 
+	If the status of the invoice is not changed to “Paid” within the due date, the status of the invoice changes to “Due”. 
+	Based on the administrator’s settings, an email may be sent to the Client reminding of the invoice.
 
-     c. The user can change the status of the Invoice to “Paid” at any time and based on the administrator’s settings, 
-	 a thank-you mail may be sent to the Client. 
-	 The user can change the status of the Invoice as “paid” only for those which he has created, 
-	 i.e he is the owner of that Invoice.
+	iii. The user can change the status of the Invoice to “Paid” at any time. 
+	Based on the administrator’s settings, a thank-you mail may be sent to the Client. 
+	The user can change the status of the Invoice as “Paid” only for those which he has created, i.e he is the owner of that Invoice.
  
-### Search: A user can search for an Invoice based on the Invoice Id, Client’s name or an Item.
+### Search: 
+A user can search for an Invoice based on the Invoice Id, Client’s name or an Item.
