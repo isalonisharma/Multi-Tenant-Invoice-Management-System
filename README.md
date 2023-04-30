@@ -11,22 +11,22 @@ A user can be an admin or a normal user.
 ### A normal user should be able to do the following:
 	1. Update his/her profile.
 
-	2. Create/Manage a one-time Invoice.
+	2. Create/Manage a one-time invoice.
 
-	3. Create/Manage a recurring Invoice. 
+	3. Create/Manage a recurring invoice. 
 	A recurring invoice is generated periodically as set by the user. 
 	For eg., The user may create a recurring invoice to be generated on 5th of every month. 
 	Once the recurring invoice is created, it is sent automatically by the system to the client.
 
 	4. Create/Manage an Item. Item is the product for which the invoice is generated. 
-	For eg., A computer sales dealer would create an Item “DELL Laptop” and generate an invoice using the Item. 
-	Item contains the name and price of the product so that the price is autofilled in the Invoice
+	For eg., A computer sales dealer create an item “DELL Laptop” and generate an invoice using the item. 
+	Item contains the name and price of the product so that the price is autofilled in the Invoice.
 
 	5. Create/Manage a Client. Client is the person/company to which an Invoice is generated and sent. 
 	In other words, it is the customer to whom the invoice needs to be billed. 
-	General Information about the Client needs to be saved; Name, Email, Company, Address, etc.)
+	General Information about the client needs to be saved; Name, Email, Company, Address, etc.)
 
-	6. Update the status of an invoice as “paid” for invoices he created.
+	6. Update the status of an invoice as “Paid” for invoices he created.
  
 ### An admin user should be able to do the following in addition to what a normal user can do:
      
@@ -61,7 +61,7 @@ Every Invoice has a status associated to it.
 **The status change can happen as follows:**
 
 	1. The initial status of the Invoice is “Draft”. 
-	Once the invoice is emailed to the Client, the status of the Invoice changes to “Sent”.
+	Once the invoice is emailed to the Client, the status of the invoice changes to “Sent”.
 	
 	2. The Invoice has a due date associated to it. 
 	If the status of the invoice is not changed to “Paid” within due date, the status of the invoice changes to “Due”. 
