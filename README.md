@@ -39,9 +39,7 @@ A user can be an admin or a normal user.
          ii. Set option to:
               1. Automatically send a reminder email to the client when the due date is passed.
               2. Automatically send a thank-you email to the client when an invoice status is updated to “Paid”.
-              3. Change the display of dates and currencies in the system. 
-	         For eg., Date display is set as dd-MMM-yyyy by the admin, and it is seen throughout the tenant's system. 
-		 Similarly, the format of currency can be changed to affect the entire system for that tenant.
+              3. Change the display of dates and currencies in the system.
  
 ### Dashboard: 
 
