@@ -37,7 +37,7 @@ A user can be an admin or a normal user.
          1. You can upload a company logo for use on the "header" section of the website and invoices.
          2. Set option to:
               -> Automatically send a reminder email to the client when the due date is passed.
-              -> Automatically send a thank-you email to the client when an invoice status is updated to “Paid”.
+              -> Send a thank-you email to the client when the invoice status changes to “Paid ”.
               -> Change the display of dates and currencies in the system.
  
 ### Dashboard: 
