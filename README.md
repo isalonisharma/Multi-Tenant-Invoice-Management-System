@@ -42,7 +42,8 @@ A user can be an admin or a normal user.
  
 ### Dashboard: 
 
-Every user, when logs into the system lands on the dashboard. 
+Every user, when logs into the system lands on the dashboard.
+
 The dashboard shows the following information in different widgets. Each widget should be loaded via Ajax.
 
 	1. The upcoming 3 invoices that are due.
@@ -51,7 +52,8 @@ The dashboard shows the following information in different widgets. Each widget 
  
 ### Invoice: 
 
-A user can create an invoice by adding Items to it and associating it with a Client. 
+A user can create an invoice by adding Items to it and associating it with a Client.
+
 Once the Invoice is created, the user clicks on “save and send”, the system generates a PDF of the invoice and sends it as an attachment to the Client. 
 Every Invoice has a status associated to it. 
 
