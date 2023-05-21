@@ -229,10 +229,10 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table case_study_db.user: ~2 rows (approximately)
+-- Dumping data for table case_study_db.user: ~1 rows (approximately)
 DELETE FROM `user`;
-INSERT INTO `user` (`id`, `username`, `first_name`, `last_name`, `mobile_number`, `password`, `is_locked`, `user_is_locked`) VALUES
-	(4, 'superadmin@mtims.com', 'super', 'admin', '9999999999', 'superadmin123!@', '0', b'0');
+INSERT INTO `user` (`id`, `username`, `first_name`, `last_name`, `mobile_number`, `password`, `is_locked`) VALUES
+	(4, 'superadmin@mtims.com', 'super', 'admin', '9999999999', 'superadmin123!@', '0');
 
 -- Dumping structure for table case_study_db.user_organization
 CREATE TABLE IF NOT EXISTS `user_organization` (
