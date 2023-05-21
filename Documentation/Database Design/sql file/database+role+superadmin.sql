@@ -85,7 +85,6 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `user_id` int(11) NOT NULL,
   `is_recurring` bit(1) NOT NULL,
   `is_locked` bit(1) NOT NULL,
-  `is_locked` bit(1) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FK6y01j0975eqwmnb0gckttrbj2` (`client_id`),
   KEY `FKjunvl5maki3unqdvljk31kns3` (`user_id`),
@@ -227,7 +226,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `mobile_number` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `is_locked` varchar(45) NOT NULL DEFAULT '0',
-  `user_is_locked` bit(1) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
