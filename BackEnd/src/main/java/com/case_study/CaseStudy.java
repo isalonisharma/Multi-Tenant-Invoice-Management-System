@@ -4,8 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Class Name: CaseStudy
@@ -24,10 +22,7 @@ import org.apache.logging.log4j.Logger;
 @EnableScheduling
 @PropertySource(value = { "classpath:environment/application.properties" })
 public class CaseStudy {
-	private static final Logger logger = LogManager.getLogger(CaseStudy.class.getName());
-
 	public static void main(String[] args) {
 		SpringApplication.run(CaseStudy.class, args);
-		logger.info("<---------------Multi-Tenant Invoice Management System-------------->");
 	}
 }

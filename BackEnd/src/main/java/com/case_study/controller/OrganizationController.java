@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,8 +34,6 @@ import com.case_study.service.UserService;
 
 @RestController
 public class OrganizationController {
-	static final Logger logger = Logger.getLogger(OrganizationController.class);
-
 	@Autowired
 	@Qualifier("organizationService")
 	private OrganizationService organizationService;
